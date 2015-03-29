@@ -45,6 +45,11 @@ func NewCodes() map[string]int {
 		"==":        41,
 		"&&":        42,
 		"||":        43,
+		"func":      44,
+		"int":       45,
+		"double":    46,
+		"string":    47,
+		"byte":      48,
 	}
 	return Codes
 }

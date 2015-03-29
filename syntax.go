@@ -17,7 +17,10 @@ var (
 	Unrecognized = errors.New("Variable have unrecognized character")
 )
 
-func main() {
+var index int
+var result string
+
+func syntax() {
 	if len(os.Args) > 1 {
 		parse(os.Args[1])
 	} else {
@@ -32,6 +35,7 @@ func parse(filepath string) {
 		return
 	}
 
+	SignalTable = make(map[string]int)
 	lines := strings.Split(string(buf), "\n")
 	// x, y := 1, 1 // column and line
 	// fmt.Println(strings.Split(string(buf), "\n"))
@@ -39,6 +43,7 @@ func parse(filepath string) {
 		word := ""
 		s = strings.TrimSpace(s)
 		for forward := 0; forward <= len(s); forward++ {
+			// fmt.Println("#", s, forward, len(s))
 			if forward == len(s) {
 				if len(word) != 0 {
 					Print(word)
@@ -86,6 +91,7 @@ func parse(filepath string) {
 					Print(word)
 				}
 				word = string(byte(s[forward])) + string(byte(s[forward+1]))
+				forward += 1
 				Print(word)
 				word = ""
 			} else if (s[forward] >= '0' && s[forward] <= '9') || (s[forward] >= 'a' && s[forward] <= 'z') ||
@@ -94,6 +100,8 @@ func parse(filepath string) {
 			}
 		}
 	}
+	ioutil.WriteFile("result.txt", []byte(result), 0777)
+	// fmt.Println(SignalTable)
 }
 
 func Print(word string) error {
@@ -102,16 +110,24 @@ func Print(word string) error {
 	_, ok := codes[word]
 	if ok {
 		fmt.Println(word + "," + word)
+		result += word + "," + word + "\n"
 		return nil
 	}
 	err := isNumber(word)
 	if err == nil {
 		fmt.Println("Constant," + word)
+		result += "Constant," + word + "\n"
 		return nil
 	}
 	err = isVariable(word)
 	if err == nil {
 		fmt.Println("Variable," + word)
+		result += "Variable," + word + "\n"
+		_, exist := SignalTable[word]
+		if !exist {
+			SignalTable[word] = index
+			index += 1
+		}
 		return nil
 	}
 	return IsnotExist
