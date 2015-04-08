@@ -1,0 +1,141 @@
+[非终结符]
+Hao'
+Hao
+Function
+Type
+Varlist
+D
+Define
+Args
+Fbody
+Senten
+L
+S
+Left
+Right
+E
+T
+F
+B
+R
+Y
+[终结符]
+int
+double
+bool
+byte
+id
+var
+semic
+fn
+,
+(
+)
+{
+}
+=
++
+-
+*
+/
+constant
+or
+and
+not
+>
+<
+>=
+<=
+==
+!=
+true
+false
+return
+for
+if
+else
+[文法起始符]
+Hao'
+[生成式]
+Hao' => Hao;
+Hao => Hao Function;
+Hao => Function;
+
+Type => int;
+Type => double;
+Type => bool;
+Type => byte;  
+
+Varlist => Varlist , id;
+Varlist => id;
+
+D => var Define;
+D => ; 
+Define => Define semic Varlist Type;
+Define => Varlist Type;
+
+Function => fn id ( Args ) { Fbody };
+Args => Args , Varlist Type;
+Args => Varlist Type;
+Args => ;
+
+
+Fbody => Senten Fbody;
+Fbody => Senten;
+Fbody => ;
+
+Senten => Senten L;
+Senten => L semic;
+Senten => ;
+
+L => D;
+L => S;
+L => ;
+
+S => Left = Right; 
+
+Left => Varlist;
+Right => E , Right;
+Right => E;
+
+E => T;
+E => E + T;
+E => E - T;
+T => F;
+T => T * F;
+T => T / F;
+F => ( E );
+F => id;
+F => constant;
+E => id ( Varlist );
+
+B => R;
+B => B or R;
+R => Y;
+R => R and Y;
+Y => ( B );
+B => not Y;
+B => E < E;
+B => E > E;
+B => E >= E;
+B => E <= E;
+B => E == E;
+B => E != E;
+B => true;
+B => false;
+
+S => return E;
+S => for E semic B semic E { Fbody };
+S => for semic B semic { Fbody };
+S => for semic semic { Fbody };
+S => if B { Fbody } else { Fbody };
+S => if B { Fbody };
+
+
+
+
+
+
+
+
+
