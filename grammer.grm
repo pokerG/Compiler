@@ -1,9 +1,10 @@
-[非终结符]
+[路脟脰脮陆谩路没]
 Hao'
 Hao
 Function
 Type
 Varlist
+Typelist
 D
 Define
 Args
@@ -19,11 +20,13 @@ F
 B
 R
 Y
-[终结符]
+IF
+[脰脮陆谩路没]
 int
 double
 bool
 byte
+string
 id
 var
 semic
@@ -54,9 +57,10 @@ return
 for
 if
 else
-[文法起始符]
+elsif
+[脦脛路篓脝冒脢录路没]
 Hao'
-[生成式]
+[脡煤鲁脡脢陆]
 Hao' => Hao;
 Hao => Hao Function;
 Hao => Function;
@@ -64,33 +68,32 @@ Hao => Function;
 Type => int;
 Type => double;
 Type => bool;
-Type => byte;  
+Type => byte; 
+Type => string; 
 
 Varlist => Varlist , id;
 Varlist => id;
 
 D => var Define;
-D => ; 
-Define => Define semic Varlist Type;
+Define => Define , Varlist Type;
 Define => Varlist Type;
 
-Function => fn id ( Args ) { Fbody };
+Function => fn id ( Args ) Typelist { Fbody };
+Typelist => Type;
+Typelist => Typelist , Type;
 Args => Args , Varlist Type;
 Args => Varlist Type;
 Args => ;
 
-
 Fbody => Senten Fbody;
 Fbody => Senten;
-Fbody => ;
+
 
 Senten => Senten L;
 Senten => L semic;
-Senten => ;
 
 L => D;
 L => S;
-L => ;
 
 S => Left = Right; 
 
@@ -128,14 +131,7 @@ S => return E;
 S => for E semic B semic E { Fbody };
 S => for semic B semic { Fbody };
 S => for semic semic { Fbody };
-S => if B { Fbody } else { Fbody };
-S => if B { Fbody };
-
-
-
-
-
-
-
-
-
+IF => if B { Fbody } else IF;
+IF => if B { Fbody };
+IF => if B { Fbody } else { Fbody };
+S => IF;
