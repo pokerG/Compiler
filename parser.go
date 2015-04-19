@@ -55,10 +55,19 @@ func (p *Parser) startParsing() {
 			content = "$"
 		} else if token_type == NUMBER || token_type == STRING || token_type == CHARACTER {
 			content = "constant"
+		} else if token_type == FID {
+			content = "fid"
 		}
 		if content == ";" {
 			content = "semic"
+		} else if content == "&&" {
+			content = "and"
+		} else if content == "||" {
+			content = "or"
+		} else if content == "!" {
+			content = "not"
 		}
+
 		S := reflect.ValueOf(top.Value).String()
 		np := pair{S, content}
 		fmt.Println(e.Value, np, p.action[np])
@@ -72,12 +81,17 @@ func (p *Parser) startParsing() {
 
 			sub := strings.Split(p.action[np], "->")
 			subb := strings.Split(strings.Trim(sub[1], " "), " ")
-			for i := 0; i < len(subb); i = i + 1 {
-				tmp := p.state_stack.Back()
-				p.state_stack.Remove(tmp)
-				tmp = p.signal_stack.Back()
-				p.signal_stack.Remove(tmp)
+			if subb[0] == "e" {
+
+			} else {
+				for i := 0; i < len(subb); i = i + 1 {
+					tmp := p.state_stack.Back()
+					p.state_stack.Remove(tmp)
+					tmp = p.signal_stack.Back()
+					p.signal_stack.Remove(tmp)
+				}
 			}
+
 			S = reflect.ValueOf(p.state_stack.Back().Value).String()
 			subb = strings.Split(strings.Trim(sub[0], " "), " ")
 			p.signal_stack.PushBack(subb[1])
