@@ -39,20 +39,34 @@ func (p *Parser) createParser(token_stream list.List) {
 	p.action = make(map[pair]string)
 	p.gotoo = make(map[pair]string)
 	p.loadTable()
-	fmt.Println(p.action)
+	// fmt.Println(p.action)
 }
 
 func (p *Parser) startParsing() {
-	for e := p.token_stream.Front(); e != nil; e = e.Next() {
+	e := p.token_stream.Front()
+	// for e := p.token_stream.Front(); e != nil; e = e.Next() {
+	for {
 		top := p.state_stack.Back()
-		// token_type := reflect.ValueOf(e.Value).Elem().Field(0).Int()
+		token_type := reflect.ValueOf(e.Value).Elem().Field(0).Int()
 		content := reflect.ValueOf(e.Value).Elem().Field(1).String()
-		S := reflect.ValueOf(top.Value).Elem().Field(1).String()
+		if token_type == IDENTIFIER {
+			content = "id"
+		} else if token_type == END_OF_FILE {
+			content = "$"
+		} else if token_type == NUMBER || token_type == STRING || token_type == CHARACTER {
+			content = "constant"
+		}
+		if content == ";" {
+			content = "semic"
+		}
+		S := reflect.ValueOf(top.Value).String()
 		np := pair{S, content}
+		fmt.Println(e.Value, np, p.action[np])
 		if strings.HasPrefix(p.action[np], "shift") { //change to state i
-			sub := strings.Split(strings.Trim(p.action[np], " "), " ")
+			sub := strings.Split(p.action[np], " ")
 			p.state_stack.PushBack(sub[1])
 			p.signal_stack.PushBack(content)
+			e = e.Next()
 		} else if strings.HasPrefix(p.action[np], "reduce") { // A->B
 			fmt.Println(strings.TrimLeft(p.action[np], "reduce "))
 
@@ -64,7 +78,7 @@ func (p *Parser) startParsing() {
 				tmp = p.signal_stack.Back()
 				p.signal_stack.Remove(tmp)
 			}
-			S = reflect.ValueOf(p.state_stack.Back()).Elem().Field(1).String()
+			S = reflect.ValueOf(p.state_stack.Back().Value).String()
 			subb = strings.Split(strings.Trim(sub[0], " "), " ")
 			p.signal_stack.PushBack(subb[1])
 			np = pair{S, subb[1]}
@@ -74,6 +88,7 @@ func (p *Parser) startParsing() {
 			return
 		} else {
 			fmt.Println("error")
+			return
 		}
 	}
 }

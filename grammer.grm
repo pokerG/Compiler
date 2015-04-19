@@ -1,4 +1,4 @@
-[路脟脰脮陆谩路没]
+[非终结符]
 Hao'
 Hao
 Function
@@ -12,6 +12,7 @@ Fbody
 Senten
 L
 S
+Assign
 Left
 Right
 E
@@ -21,7 +22,7 @@ B
 R
 Y
 IF
-[脰脮陆谩路没]
+[终结符]
 int
 double
 bool
@@ -58,9 +59,9 @@ for
 if
 else
 elsif
-[脦脛路篓脝冒脢录路没]
+[文法起始符]
 Hao'
-[脡煤鲁脡脢陆]
+[生成式]
 Hao' => Hao;
 Hao => Hao Function;
 Hao => Function;
@@ -95,8 +96,9 @@ Senten => L semic;
 L => D;
 L => S;
 
-S => Left = Right; 
 
+S => Assign;
+Assign => Left = Right; 
 Left => Varlist;
 Right => E , Right;
 Right => E;
@@ -128,8 +130,9 @@ B => true;
 B => false;
 
 S => return E;
-S => for E semic B semic E { Fbody };
+S => for Assign semic B semic E { Fbody };
 S => for semic B semic { Fbody };
+S => for semic B semic E { Fbody };
 S => for semic semic { Fbody };
 IF => if B { Fbody } else IF;
 IF => if B { Fbody };
