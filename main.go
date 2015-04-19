@@ -24,5 +24,7 @@ func main() {
 	lexer := &Lexer{}
 	lexer.createLexer(file_contents)
 	lexer.startLexing()
+	// parser := &Parser{}
+	// parser.createParser(lexer.token_stream)
 
 }
