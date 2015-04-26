@@ -1,4 +1,4 @@
-[·ÇÖÕ½á·û]
+[非终结符]
 Hao'
 Hao
 Function
@@ -21,7 +21,7 @@ B
 R
 Y
 IF
-[ÖÕ½á·û]
+[终结符]
 int
 double
 bool
@@ -58,9 +58,9 @@ for
 if
 else
 elsif
-[ÎÄ·¨ÆðÊ¼·û]
+[文法起始符]
 Hao'
-[Éú³ÉÊ½]
+[生成式]
 Hao' => Hao;
 Hao => Hao Function;
 Hao => Function;
