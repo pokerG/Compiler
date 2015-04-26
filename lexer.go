@@ -4,8 +4,11 @@ import (
 	"container/list"
 	"fmt"
 	. "github.com/pokerG/Compiler/common"
+	"reflect"
 	"strings"
 )
+
+var fun map[string]bool
 
 type Lexer struct {
 	input        string
@@ -137,7 +140,17 @@ func (self *Lexer) recognizeIdentifierToken() {
 	if ok {
 		self.createToken(RESERVED, self.flushBuffer())
 	} else {
-		self.createToken(IDENTIFIER, self.flushBuffer())
+		_, exist := fun[self.buffer]
+		if reflect.ValueOf(self.token_stream.Back().Value).Elem().Field(1).String() == "fn" {
+			fun[self.buffer] = true
+			self.createToken(FID, self.flushBuffer())
+
+		} else if exist {
+			self.createToken(FID, self.flushBuffer())
+		} else {
+			self.createToken(IDENTIFIER, self.flushBuffer())
+		}
+
 	}
 
 }
@@ -219,6 +232,7 @@ func (self *Lexer) getNextToken() {
 }
 
 func (self *Lexer) startLexing() {
+	fun = make(map[string]bool)
 	for self.running {
 		self.getNextToken()
 	}

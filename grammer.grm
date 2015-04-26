@@ -1,4 +1,4 @@
-[闈炵粓缁撶]
+[非终结符]
 Hao'
 Hao
 Function
@@ -12,6 +12,7 @@ Fbody
 Senten
 L
 S
+Assign
 Left
 Right
 E
@@ -21,7 +22,7 @@ B
 R
 Y
 IF
-[缁堢粨绗
+[终结符]
 int
 double
 bool
@@ -31,6 +32,8 @@ id
 var
 semic
 fn
+fid
+call
 ,
 (
 )
@@ -58,9 +61,9 @@ for
 if
 else
 elsif
-[鏂囨硶璧峰绗
+[文法起始符]
 Hao'
-[鐢熸垚寮廬
+[生成式]
 Hao' => Hao;
 Hao => Hao Function;
 Hao => Function;
@@ -78,7 +81,8 @@ D => var Define;
 Define => Define , Varlist Type;
 Define => Varlist Type;
 
-Function => fn id ( Args ) Typelist { Fbody };
+Function => fn fid ( Args ) Typelist { Fbody };
+Function => fn fid ( Args ) { Fbody };
 Typelist => Type;
 Typelist => Typelist , Type;
 Args => Args , Varlist Type;
@@ -95,11 +99,14 @@ Senten => L semic;
 L => D;
 L => S;
 
-S => Left = Right; 
 
+S => Assign;
+Assign => Left = Right; 
 Left => Varlist;
 Right => E , Right;
+Right => B , Right;
 Right => E;
+Right => B;
 
 E => T;
 E => E + T;
@@ -110,7 +117,8 @@ T => T / F;
 F => ( E );
 F => id;
 F => constant;
-E => id ( Varlist );
+E => fid ( Varlist );
+
 
 B => R;
 B => B or R;
@@ -127,9 +135,12 @@ B => E != E;
 B => true;
 B => false;
 
+
 S => return E;
-S => for E semic B semic E { Fbody };
+S => for Assign semic B semic Assign { Fbody };
 S => for semic B semic { Fbody };
+S => for semic B semic Assign { Fbody };
+S => for Assign semic B semic { Fbody };
 S => for semic semic { Fbody };
 IF => if B { Fbody } else IF;
 IF => if B { Fbody };

@@ -3,6 +3,7 @@ package common
 const (
 	END_OF_FILE = iota
 	IDENTIFIER
+	FID
 	RESERVED
 	OPERATOR
 	LOGICALOP
@@ -10,5 +11,6 @@ const (
 	STRING
 	CHARACTER
 	SEPARATOR
+	ENDSIGNAL
 	UNKNOWN
 )
