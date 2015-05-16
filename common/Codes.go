@@ -21,11 +21,14 @@ func NewCodes() map[string]int {
 		"return":    17,
 		"import":    18,
 		"var":       19,
-		"func":      20,
+		"nil":       20,
 		"int":       21,
 		"double":    22,
 		"string":    23,
 		"byte":      24,
+		"true":      25,
+		"false":     26,
+		"while":     27,
 	}
 	return Codes
 }

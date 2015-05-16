@@ -103,7 +103,9 @@ func (self *Lexer) consumeCharacter() {
 
 func (self *Lexer) recognizeNumberToken() {
 	self.consumeCharacter()
+	real := false
 	if self.current_char == '.' {
+		real = true
 		self.consumeCharacter()
 		for isDigit(self.current_char) {
 			self.consumeCharacter()
@@ -112,6 +114,7 @@ func (self *Lexer) recognizeNumberToken() {
 
 	for isDigit(self.current_char) {
 		if self.peek(1) == '.' {
+			real = true
 			self.consumeCharacter()
 			for isDigit(self.current_char) {
 				self.consumeCharacter()
@@ -119,8 +122,12 @@ func (self *Lexer) recognizeNumberToken() {
 		}
 		self.consumeCharacter()
 	}
+	if real {
+		self.createToken(REAL, self.flushBuffer())
+	} else {
+		self.createToken(DIGITS, self.flushBuffer())
+	}
 
-	self.createToken(NUMBER, self.flushBuffer())
 }
 
 func (self *Lexer) recognizeIdentifierToken() {
@@ -210,7 +217,7 @@ func (self *Lexer) getNextToken() {
 	}
 	self.start_pos = self.pos
 
-	if isDigit(self.current_char) || self.current_char == '.' {
+	if isDigit(self.current_char) {
 		self.recognizeNumberToken()
 	} else if isLetterOrDigit(self.current_char) || self.current_char == '_' {
 		self.recognizeIdentifierToken()

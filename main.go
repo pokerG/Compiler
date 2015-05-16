@@ -4,6 +4,8 @@ import (
 	"io/ioutil"
 )
 
+
+var signaltable *SignalTable
 func readFile(fileName string) string {
 	b, err := ioutil.ReadFile(fileName)
 	if err != nil {
@@ -13,6 +15,7 @@ func readFile(fileName string) string {
 	return string(b)
 }
 
+
 func main() {
 	// read the file contents
 	file_contents := readFile("test")
@@ -20,7 +23,7 @@ func main() {
 	var eof byte = 0
 	file_contents += string(eof)
 
-	// load up our lexer
+	signaltable = NewSignalTable()
 	lexer := &Lexer{}
 	lexer.createLexer(file_contents)
 	lexer.startLexing()

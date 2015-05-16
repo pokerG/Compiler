@@ -1,72 +1,74 @@
 [非终结符]
-Hao'
 Hao
-Function
-Type
-Varlist
-Typelist
-D
-Define
+packageheader
+functions
+function
 Args
-Fbody
-Senten
-L
-S
+Typelist
+declarations
+declaration
+Varlist
+Type
+Define
+Array
+muilType
+sentens
+senten
 Assign
-Left
-Right
+left
+lvalue
+right
 E
 T
 F
-B
-R
-Y
-IF
-[终结符]
-int
-double
-bool
-byte
-string
-id
-var
-semic
-fn
-fid
-call
-,
-(
-)
-{
-}
-=
-+
--
-*
-/
 constant
-or
-and
-not
->
-<
->=
-<=
-==
-!=
-true
-false
-return
+M
+N
+B
+relop
+global
+[终结符]
+package
+string
+fid
+fn
+var
+int double string byte bool
+id
+digits real
+semic 
+[ ] { } ( ) ,
+if else
+and or not true false 
+!= == <= >= < > =
++ - * /
 for
-if
-else
-elsif
+return
+while
 [文法起始符]
 Hao'
+
 [生成式]
+
 Hao' => Hao;
-Hao => Hao Function;
-Hao => Function;
+
+Hao => packageheader
+        declarations
+		functions;
+
+packageheader => package id;
+
+functions => functions function;
+functions => ;
+
+
+function => fn fid ( Args ) Typelist { declarations  sentens };
+function => fn fid ( Args ) { declarations  sentens };
+declarations => declarations  declaration;
+declarations => ;
+declaration => var Define semic;
+Define => Define , Varlist muilType;
+Define => Varlist muilType;
 
 Type => int;
 Type => double;
@@ -77,72 +79,64 @@ Type => string;
 Varlist => Varlist , id;
 Varlist => id;
 
-D => var Define;
-Define => Define , Varlist Type;
-Define => Varlist Type;
+muilType => Array Type;
 
-Function => fn fid ( Args ) Typelist { Fbody };
-Function => fn fid ( Args ) { Fbody };
-Typelist => Type;
-Typelist => Typelist , Type;
-Args => Args , Varlist Type;
-Args => Varlist Type;
+Array => [ digits ] | ;
+
+Args => Args , Varlist muilType;
+Args => Varlist muilType;
 Args => ;
 
-Fbody => Senten Fbody;
-Fbody => Senten;
+Typelist => muilType;
+Typelist => Typelist , muilType;
 
 
-Senten => Senten L;
-Senten => L semic;
+sentens => sentens M senten;
+sentens => ;
+senten => Assign semic;
 
-L => D;
-L => S;
+Assign => left = right;
+left => left , lvalue;
+left => lvalue;
+lvalue => id | 
+		id [ digits ] |
+		id [ id ];
 
+right => right , E;
+right => E;
 
-S => Assign;
-Assign => Left = Right; 
-Left => Varlist;
-Right => E , Right;
-Right => B , Right;
-Right => E;
-Right => B;
-
-E => T;
 E => E + T;
 E => E - T;
-T => F;
+E => T;
 T => T * F;
 T => T / F;
+T => F;
 F => ( E );
-F => id;
 F => constant;
-E => fid ( Varlist );
+F => lvalue;
+constant => digits | real;
 
+senten => if B { M  sentens };
+senten => if B { M sentens  } N else { M  sentens };
 
-B => R;
-B => B or R;
-R => Y;
-R => R and Y;
-Y => ( B );
-B => not Y;
-B => E < E;
-B => E > E;
-B => E >= E;
-B => E <= E;
-B => E == E;
-B => E != E;
+B => ( B or M B );
+B => ( B and M B );
+B => not B;
+B => ( B );
+B => E relop E;
 B => true;
 B => false;
+relop => != | == | <= | >= | < | >;
+
+senten => for Assign semic B semic Assign { M sentens };
+senten => for semic semic { M sentens };
+senten => for semic B semic { M sentens };
+senten => for Assign semic B semic { M sentens };
+senten => for semic B semic Assign { M sentens };
+senten => while M B { M sentens };
+senten => return E semic;
+
+M => ;
+N => ;
 
 
-S => return E;
-S => for Assign semic B semic Assign { Fbody };
-S => for semic B semic { Fbody };
-S => for semic B semic Assign { Fbody };
-S => for Assign semic B semic { Fbody };
-S => for semic semic { Fbody };
-IF => if B { Fbody } else IF;
-IF => if B { Fbody };
-IF => if B { Fbody } else { Fbody };
-S => IF;
